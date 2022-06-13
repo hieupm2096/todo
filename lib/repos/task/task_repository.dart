@@ -8,7 +8,7 @@ abstract class ITaskRepository {
   });
 
   Future<Result<Task, Failure>> createTask({
-    String? content,
+    required String content,
   });
 
   Future<Result<Task, Failure>> updateTask({
