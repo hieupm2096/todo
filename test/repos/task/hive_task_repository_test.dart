@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:todo/models/failure.dart';
@@ -24,6 +25,11 @@ void main() {
   group('getTasks', () {
     final tTasks = (jsonDecode(fixture('tasks.json')) as List).map((e) => Task.fromJson(e)).toList();
 
+    void arrangeGetTasksSuccess() {
+      when(mockTaskBox.isOpen).thenReturn(true);
+      when(mockTaskBox.values).thenReturn(tTasks);
+    }
+
     test(
       'should return DatabaseFailure if Box is not open',
       () async {
@@ -38,8 +44,7 @@ void main() {
     test(
       'should perform Box get values if Box is open',
       () {
-        when(mockTaskBox.isOpen).thenReturn(true);
-        when(mockTaskBox.values).thenReturn(tTasks);
+        arrangeGetTasksSuccess();
 
         repository.getTasks();
 
@@ -50,8 +55,7 @@ void main() {
     test(
       'should return List<Task>',
       () async {
-        when(mockTaskBox.isOpen).thenReturn(true);
-        when(mockTaskBox.values).thenReturn(tTasks);
+        arrangeGetTasksSuccess();
 
         final result = await repository.getTasks();
 
@@ -62,8 +66,8 @@ void main() {
     test(
       'should return List<Task> with filtered TaskStatus parameter',
       () async {
-        when(mockTaskBox.isOpen).thenReturn(true);
-        when(mockTaskBox.values).thenReturn(tTasks);
+        arrangeGetTasksSuccess();
+
         final expectedResult = tTasks.where((element) => element.status == TaskStatus.complete).toList();
 
         final result = await repository.getTasks(taskStatus: TaskStatus.complete);
@@ -73,9 +77,20 @@ void main() {
     );
   });
 
-  // createTask
+  // saveTask
   group('createTask', () {
-    const tContent = 'Countless coordinates will be lost in cores like anomalies in shields';
+    final tTask = Task(
+      id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
+      content: 'Do the launchdry',
+      createdAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
+      updatedAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
+      status: TaskStatus.complete,
+    );
+
+    void arrangeCreateTaskSuccess() {
+      when(mockTaskBox.isOpen).thenReturn(true);
+      when(mockTaskBox.get(any)).thenReturn(tTask);
+    }
 
     test(
       'should return DatabaseFailure if Box is not open',
@@ -89,16 +104,45 @@ void main() {
     );
 
     test(
-      'should perform Box add task if Box is open',
+      'should perform Box put task if Box is open',
       () async {
-        when(mockTaskBox.isOpen).thenReturn(true);
+        arrangeCreateTaskSuccess();
 
-        repository.createTask(content: tContent);
+        repository.createTask(task: tTask);
 
-        verify(mockTaskBox.add(any));
+        verify(mockTaskBox.put(any, any));
       },
     );
 
-    
+    test(
+      'should perform Box get task to verify put success',
+      () async {
+        arrangeCreateTaskSuccess();
+
+        await repository.createTask(task: tTask);
+
+        verify(mockTaskBox.get(any));
+      },
+    );
+
+    test('should return DatabaseFailure if could not get back put task', () async {
+      when(mockTaskBox.isOpen).thenReturn(true);
+      when(mockTaskBox.get(any)).thenReturn(null);
+
+      final result = await repository.createTask(task: tTask);
+
+      expect(result.failure, const DatabaseFailure());
+    });
+
+    test(
+      'should return Task which equal to input task',
+      () async {
+        arrangeCreateTaskSuccess();
+
+        final result = await repository.createTask(task: tTask);
+
+        expect(result.success, tTask);
+      },
+    );
   });
 }

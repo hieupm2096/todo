@@ -3,7 +3,6 @@ import 'package:simple_result/simple_result.dart';
 import 'package:todo/models/failure.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/repos/task/task_repository.dart';
-import 'package:todo/commons/constants/constants.dart' as constants;
 
 class HiveTaskRepository implements ITaskRepository {
   final Box<Task> _taskBox;
@@ -11,9 +10,29 @@ class HiveTaskRepository implements ITaskRepository {
   const HiveTaskRepository({required Box<Task> taskBox}) : _taskBox = taskBox;
 
   @override
-  Future<Result<Task, Failure>> createTask({required String content}) {
-    // TODO: implement createTask
-    throw UnimplementedError();
+  Future<Result<Task, Failure>> createTask({required Task task}) async {
+    return await _saveTask(task);
+  }
+
+  @override
+  Future<Result<Task, Failure>> updateTask({required Task task}) async {
+    return await _saveTask(task);
+  }
+
+  Future<Result<Task, Failure>> _saveTask(Task task) async {
+    if (!_taskBox.isOpen) {
+      return const Result.failure(DatabaseFailure());
+    }
+
+    await _taskBox.put(task.id, task);
+
+    final result = _taskBox.get(task.id);
+
+    if (result == null) {
+      return const Result.failure(DatabaseFailure());
+    }
+
+    return Result.success(result);
   }
 
   @override
@@ -32,11 +51,5 @@ class HiveTaskRepository implements ITaskRepository {
       tasks = _taskBox.values.toList();
     }
     return Result.success(tasks);
-  }
-
-  @override
-  Future<Result<Task, Failure>> updateTask({String? content, TaskStatus? taskStatus}) {
-    // TODO: implement updateTask
-    throw UnimplementedError();
   }
 }

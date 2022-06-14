@@ -1,16 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:todo/models/task.dart';
 
 import '../fixtures/fixture_reader.dart';
 
 void main() {
-  const tTask = Task(
-    id: 1,
+  final tTask = Task(
+    id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
     content: 'Do the launchdry',
-    createdAt: '2022-06-12T08:02:31+07:00',
-    updatedAt: '2022-06-12T08:02:31+07:00',
+    createdAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
+    updatedAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
     status: TaskStatus.complete,
   );
 
@@ -33,11 +34,11 @@ void main() {
       () {
         final result = tTask.toJson();
         final expectedResult = {
-          "id": 1,
+          "id": "6c84fb90-12c4-11e1-840d-7b25c5ee775a",
           "content": "Do the launchdry",
           "status": 1,
-          "createdAt": "2022-06-12T08:02:31+07:00",
-          "updatedAt": "2022-06-12T08:02:31+07:00"
+          "createdAt": "2021-05-25T12:00:00.000Z",
+          "updatedAt": "2021-05-25T12:00:00.000Z"
         };
         expect(result, expectedResult);
       },
