@@ -7,6 +7,8 @@ abstract class ITaskRepository {
     TaskStatus? taskStatus,
   });
 
+  Future<Result<Task, Failure>> getTask({required String id});
+
   Future<Result<Task, Failure>> createTask({
     required Task task,
   });

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:todo/models/failure.dart';
@@ -59,7 +58,7 @@ void main() {
 
         final result = await repository.getTasks();
 
-        expect(result.success, tTasks);
+        expect(result.success, isA<List<Task>>());
       },
     );
 
@@ -77,13 +76,73 @@ void main() {
     );
   });
 
+  group('getTask', () {
+    const tId = '6c84fb90-12c4-11e1-840d-7b25c5ee775a';
+    final tTask = Task(
+      id: tId,
+      content: 'Do the launchdry',
+      createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      status: TaskStatus.complete,
+    );
+
+    void arrangeGetTasksSuccess() {
+      when(mockTaskBox.isOpen).thenReturn(true);
+      when(mockTaskBox.get(any)).thenReturn(tTask);
+    }
+
+    test(
+      'should return DatabaseFailure if Box is not open',
+      () async {
+        when(mockTaskBox.isOpen).thenReturn(false);
+
+        final result = await repository.getTask(id: tId);
+
+        expect(result.failure, const DatabaseFailure());
+      },
+    );
+
+    test(
+      'should perform Box get(id) if Box is open',
+      () {
+        arrangeGetTasksSuccess();
+
+        repository.getTask(id: tId);
+
+        verify(mockTaskBox.get(tId));
+      },
+    );
+
+    test(
+      'should return Task',
+      () async {
+        arrangeGetTasksSuccess();
+
+        final result = await repository.getTask(id: tId);
+
+        expect(result.success, isA<Task>());
+      },
+    );
+
+    test(
+      'should return Task with the same id with parameter',
+      () async {
+        arrangeGetTasksSuccess();
+
+        final result = await repository.getTask(id: tId);
+
+        expect(result.success?.id, tId);
+      },
+    );
+  });
+
   // saveTask
   group('createTask', () {
     final tTask = Task(
       id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
       content: 'Do the launchdry',
-      createdAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
-      updatedAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
+      createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
       status: TaskStatus.complete,
     );
 

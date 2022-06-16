@@ -6,6 +6,9 @@ abstract class Failure {
 
 // Local Database Failure
 class DatabaseFailure extends Failure {
+  const DatabaseFailure() : super(message: "Well, there's something wrong with the storage");
+}
 
-  const DatabaseFailure() : super();
+class NotFoundFailure extends Failure {
+  const NotFoundFailure() : super(message: "Seems like there's something wrong with your task");
 }

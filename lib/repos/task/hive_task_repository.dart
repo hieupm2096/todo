@@ -52,4 +52,19 @@ class HiveTaskRepository implements ITaskRepository {
     }
     return Result.success(tasks);
   }
+
+  @override
+  Future<Result<Task, Failure>> getTask({required String id}) async {
+    if (!_taskBox.isOpen) {
+      return const Result.failure(DatabaseFailure());
+    }
+
+    final task = _taskBox.get(id);
+
+    if (task == null) {
+      return const Result.failure(NotFoundFailure());
+    }
+
+    return Result.success(task);
+  }
 }
