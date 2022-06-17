@@ -60,7 +60,7 @@ class _AllTaskPageState extends State<AllTaskPage> {
                     builder: (context, state) {
                       if (state is TaskFetchedSuccess) {
                         if (state.tasks.isEmpty) {
-                          return const EmptyTaskWidget(message: "There's no task yet!\n Add a new Task  ⬇️");
+                          return const EmptyTaskWidget(message: "There's no task yet!\n Add a new Task ✨");
                         }
 
                         return ListTask(

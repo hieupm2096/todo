@@ -15,8 +15,10 @@ class App extends StatelessWidget {
 
     return MaterialApp(
       title: 'Todo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
+        brightness: Brightness.dark,
         textTheme: GoogleFonts.mulishTextTheme(textTheme.apply(
           bodyColor: ColorName.text,
           displayColor: ColorName.text,
