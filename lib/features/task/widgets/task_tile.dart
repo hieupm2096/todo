@@ -19,10 +19,11 @@ class TaskTile extends StatefulWidget {
 class _TaskTileState extends State<TaskTile> {
   late bool _done;
 
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  initState() {
     _done = widget.task.isDone;
+    super.initState();
   }
 
   @override

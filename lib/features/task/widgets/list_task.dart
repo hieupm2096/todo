@@ -18,7 +18,7 @@ class ListTask extends StatelessWidget {
       itemBuilder: (context, index) {
         final task = tasks[index];
         return TaskTile(
-          key: GlobalKey(),
+          key: UniqueKey(),
           task: task,
           onCheckBoxTap: (value) => onCheckBoxTap?.call(task.id, value),
         );
