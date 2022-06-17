@@ -11,15 +11,15 @@ class HiveTaskRepository implements ITaskRepository {
 
   @override
   Future<Result<Task, Failure>> createTask({required Task task}) async {
-    return await _saveTask(task);
+    return await saveTask(task: task);
   }
 
   @override
   Future<Result<Task, Failure>> updateTask({required Task task}) async {
-    return await _saveTask(task);
+    return await saveTask(task: task);
   }
 
-  Future<Result<Task, Failure>> _saveTask(Task task) async {
+  Future<Result<Task, Failure>> saveTask({required Task task}) async {
     if (!_taskBox.isOpen) {
       return const Result.failure(DatabaseFailure());
     }

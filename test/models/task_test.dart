@@ -44,4 +44,24 @@ void main() {
       },
     );
   });
+
+  group('copyWith', () {
+    const tTaskStatus = TaskStatus.incomplete;
+    final tExpectedTask = Task(
+      id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
+      content: 'Do the launchdry',
+      createdAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
+      updatedAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
+      status: TaskStatus.incomplete,
+    );
+
+    test(
+      'should return a copied object',
+      () {
+        final copiedTask = tTask.copyWith(status: tTaskStatus);
+
+        expect(copiedTask, tExpectedTask);
+      },
+    );
+  });
 }

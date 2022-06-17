@@ -136,7 +136,7 @@ void main() {
     );
   });
 
-  // saveTask
+  // createTask
   group('createTask', () {
     final tTask = Task(
       id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
@@ -146,7 +146,60 @@ void main() {
       status: TaskStatus.complete,
     );
 
-    void arrangeCreateTaskSuccess() {
+    void arrangeSaveTaskSuccess() {
+      when(mockTaskBox.isOpen).thenReturn(true);
+      when(mockTaskBox.get(any)).thenReturn(tTask);
+    }
+
+    test(
+      'should call saveTask',
+      () {
+        arrangeSaveTaskSuccess();
+
+        repository.createTask(task: tTask);
+
+        verify(repository.saveTask(task: tTask));
+      },
+    );
+  });
+
+  group('updateTask', () {
+    final tTask = Task(
+      id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
+      content: 'Do the launchdry',
+      createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      status: TaskStatus.complete,
+    );
+
+    void arrangeSaveTaskSuccess() {
+      when(mockTaskBox.isOpen).thenReturn(true);
+      when(mockTaskBox.get(any)).thenReturn(tTask);
+    }
+
+    test(
+      'should call saveTask',
+      () {
+        arrangeSaveTaskSuccess();
+
+        repository.updateTask(task: tTask);
+
+        verify(repository.saveTask(task: tTask));
+      },
+    );
+  });
+
+  // saveTask
+  group('saveTask', () {
+    final tTask = Task(
+      id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
+      content: 'Do the launchdry',
+      createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      status: TaskStatus.complete,
+    );
+
+    void arrangeSaveTaskSuccess() {
       when(mockTaskBox.isOpen).thenReturn(true);
       when(mockTaskBox.get(any)).thenReturn(tTask);
     }
@@ -156,7 +209,7 @@ void main() {
       () async {
         when(mockTaskBox.isOpen).thenReturn(false);
 
-        final result = await repository.getTasks();
+        final result = await repository.saveTask(task: tTask);
 
         expect(result.failure, const DatabaseFailure());
       },
@@ -165,9 +218,9 @@ void main() {
     test(
       'should perform Box put task if Box is open',
       () async {
-        arrangeCreateTaskSuccess();
+        arrangeSaveTaskSuccess();
 
-        repository.createTask(task: tTask);
+        repository.saveTask(task: tTask);
 
         verify(mockTaskBox.put(any, any));
       },
@@ -176,9 +229,9 @@ void main() {
     test(
       'should perform Box get task to verify put success',
       () async {
-        arrangeCreateTaskSuccess();
+        arrangeSaveTaskSuccess();
 
-        await repository.createTask(task: tTask);
+        await repository.saveTask(task: tTask);
 
         verify(mockTaskBox.get(any));
       },
@@ -188,7 +241,7 @@ void main() {
       when(mockTaskBox.isOpen).thenReturn(true);
       when(mockTaskBox.get(any)).thenReturn(null);
 
-      final result = await repository.createTask(task: tTask);
+      final result = await repository.saveTask(task: tTask);
 
       expect(result.failure, const DatabaseFailure());
     });
@@ -196,7 +249,7 @@ void main() {
     test(
       'should return Task which equal to input task',
       () async {
-        arrangeCreateTaskSuccess();
+        arrangeSaveTaskSuccess();
 
         final result = await repository.createTask(task: tTask);
 
