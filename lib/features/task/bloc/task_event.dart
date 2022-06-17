@@ -6,12 +6,12 @@ abstract class TaskEvent extends Equatable {
 }
 
 class TaskFetched extends TaskEvent {
-  final TaskStatus? taskStatus;
+  final bool? isDone;
 
-  const TaskFetched({this.taskStatus});
+  const TaskFetched({this.isDone});
 
   @override
-  List<Object?> get props => [taskStatus];
+  List<Object?> get props => [isDone];
 }
 
 class TaskCreated extends TaskEvent {
@@ -26,14 +26,14 @@ class TaskCreated extends TaskEvent {
 class TaskUpdated extends TaskEvent {
   final String id;
   final String? content;
-  final TaskStatus? taskStatus;
+  final bool? isDone;
 
   const TaskUpdated({
     required this.id,
     this.content,
-    this.taskStatus,
+    this.isDone,
   });
 
   @override
-  List<Object?> get props => [id, content, taskStatus];
+  List<Object?> get props => [id, content, isDone];
 }

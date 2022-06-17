@@ -4,7 +4,7 @@ import 'package:todo/models/task.dart';
 
 abstract class ITaskRepository {
   Future<Result<List<Task>, Failure>> getTasks({
-    TaskStatus? taskStatus,
+    bool? isDone,
   });
 
   Future<Result<Task, Failure>> getTask({required String id});

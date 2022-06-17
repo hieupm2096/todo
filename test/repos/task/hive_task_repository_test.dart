@@ -67,9 +67,9 @@ void main() {
       () async {
         arrangeGetTasksSuccess();
 
-        final expectedResult = tTasks.where((element) => element.status == TaskStatus.complete).toList();
+        final expectedResult = tTasks.where((element) => element.isDone == true).toList();
 
-        final result = await repository.getTasks(taskStatus: TaskStatus.complete);
+        final result = await repository.getTasks(isDone: true);
 
         expect(result.success, expectedResult);
       },
@@ -83,7 +83,7 @@ void main() {
       content: 'Do the launchdry',
       createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
       updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
-      status: TaskStatus.complete,
+      isDone: true,
     );
 
     void arrangeGetTasksSuccess() {
@@ -143,7 +143,7 @@ void main() {
       content: 'Do the launchdry',
       createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
       updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
-      status: TaskStatus.complete,
+      isDone: true,
     );
 
     void arrangeSaveTaskSuccess() {
@@ -169,7 +169,7 @@ void main() {
       content: 'Do the launchdry',
       createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
       updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
-      status: TaskStatus.complete,
+      isDone: true,
     );
 
     void arrangeSaveTaskSuccess() {
@@ -196,7 +196,7 @@ void main() {
       content: 'Do the launchdry',
       createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
       updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
-      status: TaskStatus.complete,
+      isDone: true,
     );
 
     void arrangeSaveTaskSuccess() {

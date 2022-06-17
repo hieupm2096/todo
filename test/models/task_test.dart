@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:todo/models/task.dart';
 
 import '../fixtures/fixture_reader.dart';
@@ -10,9 +9,9 @@ void main() {
   final tTask = Task(
     id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
     content: 'Do the launchdry',
-    createdAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
-    updatedAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
-    status: TaskStatus.complete,
+    createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+    updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+    isDone: true,
   );
 
   group('fromJson', () {
@@ -36,7 +35,7 @@ void main() {
         final expectedResult = {
           "id": "6c84fb90-12c4-11e1-840d-7b25c5ee775a",
           "content": "Do the launchdry",
-          "status": 1,
+          "isDone": true,
           "createdAt": "2021-05-25T12:00:00.000Z",
           "updatedAt": "2021-05-25T12:00:00.000Z"
         };
@@ -46,21 +45,30 @@ void main() {
   });
 
   group('copyWith', () {
-    const tTaskStatus = TaskStatus.incomplete;
+    const tIsDone = false;
     final tExpectedTask = Task(
       id: '6c84fb90-12c4-11e1-840d-7b25c5ee775a',
       content: 'Do the launchdry',
-      createdAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
-      updatedAt: Jiffy('2021-05-25T12:00:00.000Z').dateTime,
-      status: TaskStatus.incomplete,
+      createdAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      updatedAt: DateTime.parse('2021-05-25T12:00:00.000Z'),
+      isDone: tIsDone,
     );
 
     test(
       'should return a copied object',
       () {
-        final copiedTask = tTask.copyWith(status: tTaskStatus);
+        final copiedTask = tTask.copyWith(isDone: tIsDone);
 
         expect(copiedTask, tExpectedTask);
+      },
+    );
+
+    test(
+      'should return the same object if no parameter',
+      () {
+        final copiedTask = tTask.copyWith();
+
+        expect(copiedTask, tTask);
       },
     );
   });

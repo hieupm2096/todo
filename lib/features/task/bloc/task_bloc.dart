@@ -11,6 +11,18 @@ part 'task_event.dart';
 
 part 'task_state.dart';
 
+class AllTaskBloc extends TaskBloc {
+  AllTaskBloc({required super.taskRepository});
+}
+
+class CompleteTaskBloc extends TaskBloc {
+  CompleteTaskBloc({required super.taskRepository});
+}
+
+class IncompleteTaskBloc extends TaskBloc {
+  IncompleteTaskBloc({required super.taskRepository});
+}
+
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final ITaskRepository _taskRepository;
 
@@ -28,10 +40,20 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   ) async {
     emit(const TaskFetchedInProgress());
 
-    final result = await _taskRepository.getTasks(taskStatus: event.taskStatus);
+    final result = await _taskRepository.getTasks(isDone: event.isDone);
 
     result.when(
-      success: (tasks) => emit(TaskFetchedSuccess(tasks: tasks)),
+      success: (tasks) {
+        tasks.sort(
+          (a, b) {
+            if (a.createdAt != null && b.createdAt != null) {
+              return b.createdAt!.compareTo(a.createdAt!);
+            }
+            return 0;
+          },
+        );
+        emit(TaskFetchedSuccess(tasks: tasks));
+      },
       failure: (failure) => emit(TaskFetchedFailure(message: failure.message)),
     );
   }
@@ -43,7 +65,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(const TaskCreatedInProgress());
 
     final task = Task(
-      id: const Uuid().toString(),
+      id: const Uuid().v1(),
       content: event.content,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -66,7 +88,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       success: (task) async {
         final updatedTask = task.copyWith(
           content: event.content,
-          status: event.taskStatus,
+          isDone: event.isDone,
           updatedAt: DateTime.now(),
         );
 

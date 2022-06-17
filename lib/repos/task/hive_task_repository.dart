@@ -37,7 +37,7 @@ class HiveTaskRepository implements ITaskRepository {
 
   @override
   Future<Result<List<Task>, Failure>> getTasks({
-    TaskStatus? taskStatus,
+    bool? isDone,
   }) async {
     if (!_taskBox.isOpen) {
       return const Result.failure(DatabaseFailure());
@@ -45,8 +45,8 @@ class HiveTaskRepository implements ITaskRepository {
 
     late List<Task> tasks;
 
-    if (taskStatus != null) {
-      tasks = _taskBox.values.where((element) => element.status == taskStatus).toList();
+    if (isDone != null) {
+      tasks = _taskBox.values.where((element) => element.isDone == isDone).toList();
     } else {
       tasks = _taskBox.values.toList();
     }

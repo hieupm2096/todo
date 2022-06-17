@@ -2,42 +2,42 @@
   {
     "id": "6c84fb90-12c4-11e1-840d-7b25c5ee775a",
     "content": "Do the launchdry",
-    "status": 1,
+    "isDone": true,
     "createdAt": "2021-05-25T12:00:00.000Z",
     "updatedAt": "2021-05-25T12:00:00.000Z"
   },
   {
     "id": "47bc446b-49b0-4a41-9192-87b073441a15",
     "content": "Peace at the cosmos that is when ship-wide parasites die.",
-    "status": 1,
+    "isDone": true,
     "createdAt": "2021-05-25T12:00:00.000Z",
     "updatedAt": "2021-05-25T12:00:00.000Z"
   },
   {
     "id": "7c651014-8628-4491-891c-349931a90e5c",
     "content": "I teleport this turbulence, it's called solid mankind.",
-    "status": 1,
+    "isDone": true,
     "createdAt": "2021-05-25T12:00:00.000Z",
     "updatedAt": "2021-05-25T12:00:00.000Z"
   },
   {
     "id": "f7d637a9-eb10-4b2a-ad5a-87064976b8b1",
     "content": "The teleporter is cunningly quirky.",
-    "status": 0,
+    "isDone": false,
     "createdAt": "2021-05-25T12:00:00.000Z",
     "updatedAt": "2021-05-25T12:00:00.000Z"
   },
   {
     "id": "79f296e4-0d7f-48fd-94fd-b26f4f7c6ab7",
     "content": "The transporter trembles pressure like an interstellar tribble.",
-    "status": 1,
+    "isDone": true,
     "createdAt": "2021-05-25T12:00:00.000Z",
     "updatedAt": "2021-05-25T12:00:00.000Z"
   },
   {
     "id": "aa6d0296-7df6-4df3-87cd-41931c366f3d",
     "content": "Cold planets, to the saucer section.",
-    "status": 0,
+    "isDone": false,
     "createdAt": "2021-05-25T12:00:00.000Z",
     "updatedAt": "2021-05-25T12:00:00.000Z"
   }

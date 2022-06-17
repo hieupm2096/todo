@@ -33,9 +33,8 @@ class MockTaskRepository extends _i1.Mock implements _i3.ITaskRepository {
 
   @override
   _i4.Future<_i2.Result<List<_i5.Task>, _i6.Failure>> getTasks(
-          {_i5.TaskStatus? taskStatus}) =>
-      (super.noSuchMethod(
-          Invocation.method(#getTasks, [], {#taskStatus: taskStatus}),
+          {bool? isDone}) =>
+      (super.noSuchMethod(Invocation.method(#getTasks, [], {#isDone: isDone}),
           returnValue: Future<_i2.Result<List<_i5.Task>, _i6.Failure>>.value(
               _FakeResult_0<List<_i5.Task>, _i6.Failure>())) as _i4
           .Future<_i2.Result<List<_i5.Task>, _i6.Failure>>);

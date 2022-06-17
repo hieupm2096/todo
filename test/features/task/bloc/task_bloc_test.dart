@@ -34,28 +34,28 @@ void main() {
 
   // TaskFetched
   group('TaskFetched event', () {
-    const tTaskStatus = TaskStatus.complete;
+    const tIsDone = true;
     final tTasks = (jsonDecode(fixture('tasks.json')) as List).map((e) => Task.fromJson(e)).toList();
 
     void arrangeTaskFetchedSuccess() {
-      when(mockTaskRepository.getTasks(taskStatus: anyNamed("taskStatus")))
+      when(mockTaskRepository.getTasks(isDone: anyNamed("isDone")))
           .thenAnswer((_) => Future.value(Result.success(tTasks)));
     }
 
     void arrangeTaskFetchedFailure() {
-      when(mockTaskRepository.getTasks(taskStatus: anyNamed("taskStatus")))
+      when(mockTaskRepository.getTasks(isDone: anyNamed("isDone")))
           .thenAnswer((_) => Future.value(const Result.failure(DatabaseFailure())));
     }
 
     blocTest(
-      'should call ITaskRepository.getTasks with proper TaskStatus parameter',
+      'should call ITaskRepository.getTasks with proper isDone parameter',
       build: () {
         arrangeTaskFetchedSuccess();
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskFetched(taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskFetched(isDone: tIsDone)),
       verify: (_) {
-        verify(mockTaskRepository.getTasks(taskStatus: tTaskStatus)).called(1);
+        verify(mockTaskRepository.getTasks(isDone: tIsDone)).called(1);
       },
     );
 
@@ -65,7 +65,7 @@ void main() {
         arrangeTaskFetchedSuccess();
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskFetched(taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskFetched(isDone: tIsDone)),
       expect: () => [
         const TaskFetchedInProgress(),
         TaskFetchedSuccess(tasks: tTasks),
@@ -78,7 +78,7 @@ void main() {
         arrangeTaskFetchedFailure();
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskFetched(taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskFetched(isDone: tIsDone)),
       expect: () => [
         const TaskFetchedInProgress(),
         TaskFetchedFailure(message: const DatabaseFailure().message),
@@ -142,7 +142,7 @@ void main() {
   group('TaskUpdated', () {
     const tId = '6c84fb90-12c4-11e1-840d-7b25c5ee775a';
     const tContent = 'The dead astronaut quickly translates the pathway.';
-    const tTaskStatus = TaskStatus.complete;
+    const tIsDone = true;
 
     final tTask = Task(
       id: tId,
@@ -164,7 +164,7 @@ void main() {
         arrangeTaskUpdatedSuccess();
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, isDone: tIsDone)),
       verify: (_) {
         verify(mockTaskRepository.getTask(id: tId)).called(1);
       },
@@ -176,7 +176,7 @@ void main() {
         arrangeTaskUpdatedSuccess();
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, isDone: tIsDone)),
       verify: (_) {
         verify(mockTaskRepository.updateTask(task: argThat(isNotNull, named: 'task'))).called(1);
       },
@@ -188,7 +188,7 @@ void main() {
         arrangeTaskUpdatedSuccess();
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, isDone: tIsDone)),
       expect: () => [
         const TaskUpdatedInProgress(),
         TaskUpdatedSuccess(task: tTask),
@@ -204,7 +204,7 @@ void main() {
             .thenAnswer((_) => Future.value(Result.success(tTask)));
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, isDone: tIsDone)),
       expect: () => [
         const TaskUpdatedInProgress(),
         TaskUpdatedFailure(message: const NotFoundFailure().message),
@@ -220,7 +220,7 @@ void main() {
             .thenAnswer((_) => Future.value(const Result.failure(DatabaseFailure())));
         return taskBloc;
       },
-      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, taskStatus: tTaskStatus)),
+      act: (TaskBloc bloc) => bloc.add(const TaskUpdated(id: tId, content: tContent, isDone: tIsDone)),
       expect: () => [
         const TaskUpdatedInProgress(),
         TaskUpdatedFailure(message: const DatabaseFailure().message),
