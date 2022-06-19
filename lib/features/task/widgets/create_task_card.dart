@@ -25,6 +25,12 @@ class _CreateTaskCardState extends State<CreateTaskCard> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -34,23 +40,25 @@ class _CreateTaskCardState extends State<CreateTaskCard> {
           color: ColorName.secondaryBackground,
           borderRadius: BorderRadius.circular(4.0),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  maxLines: 5,
-                  minLines: 1,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Add a Task',
-                    hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: ColorName.primary),
-                  ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                maxLines: 5,
+                minLines: 1,
+                decoration: InputDecoration(
+                  hintText: 'Add a Task',
+                  hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: ColorName.primary),
+                  contentPadding: const EdgeInsets.fromLTRB(20.0, 8.0, 0.0, 8.0),
+                  border: InputBorder.none,
                 ),
               ),
-              _creatable
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: _creatable
                   ? TextButton(
                       onPressed: () {
                         FocusScope.of(context).unfocus();
@@ -70,14 +78,14 @@ class _CreateTaskCardState extends State<CreateTaskCard> {
                       ),
                     )
                   : const Padding(
-                      padding: EdgeInsets.all(6.0),
+                      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
                       child: Icon(
                         Icons.add,
                         color: ColorName.primary,
                       ),
                     ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -19,9 +19,8 @@ class TaskTile extends StatefulWidget {
 class _TaskTileState extends State<TaskTile> {
   late bool _done;
 
-
   @override
-  initState() {
+  void initState() {
     _done = widget.task.isDone;
     super.initState();
   }
